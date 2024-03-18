@@ -10,8 +10,6 @@ POSTGRES_HOST = "localhost"
 POSTGRES_PORT = "5432"
 conn = psycopg.connect(f"dbname=postgres user={POSTGRES_USER} host={POSTGRES_HOST} port={POSTGRES_PORT} password={POSTGRES_PASSWORD}")
 
-RUN_INSERT_INTIAL_DATA = True # Set to True to insert initial data into the table
-
 # Function definitions
 def getAllStudents():
     with conn.cursor() as cur:
@@ -47,24 +45,8 @@ def deleteStudent(student_id):
         )
         conn.commit()
 
-def addInitialData():
-    with conn.cursor() as cur:
-        students_data = [
-            ('John', 'Doe', 'john.doe@example.com', '2023-09-01'),
-            ('Jane', 'Smith', 'jane.smith@example.com', '2023-09-01'),
-            ('Jim', 'Beam', 'jim.beam@example.com', '2023-09-02')
-        ]
-        
-        cur.executemany(
-            "INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s);",
-            students_data
-        )
-        conn.commit()
-
 
 if __name__ == "__main__":
-    if RUN_INSERT_INTIAL_DATA:
-        addInitialData()
     while True:
         print("\nMenu:")
         print("1. View all students")
